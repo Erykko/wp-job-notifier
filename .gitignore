@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.env
+.venv/
+venv/
+.DS_Store
+*.pdf
+
+# Private candidate data — keep local only
+resume.txt
+resumes/*.txt
+!resumes/README.md
+!resumes/example-role.txt

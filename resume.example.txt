@@ -1,0 +1,31 @@
+YOUR NAME
+
+CONTACT INFORMATION
+Your City, Country
+you@example.com
++1 555 000 0000
+https://example.com
+
+PROFESSIONAL SUMMARY
+WordPress Developer with experience building, maintaining, and optimizing WordPress websites. Skilled in custom themes, plugins, WooCommerce, performance, and technical SEO.
+
+WORK EXPERIENCE
+
+WordPress Developer
+Example Agency
+Remote
+January 2020 - Present
+- Build and maintain custom WordPress themes and plugins
+- Troubleshoot production issues and improve Core Web Vitals
+- Support migrations, DNS, SSL, and hosting workflows
+
+SKILLS
+Programming Languages: PHP, JavaScript, Python, SQL, HTML, CSS
+WordPress: WordPress Core, WooCommerce, Advanced Custom Fields, WP-CLI
+Performance and SEO: Core Web Vitals, technical SEO, caching
+Tools: Git, Composer, npm, Cloudflare
+
+EDUCATION
+
+Bachelor of Arts, Example Degree
+Example University

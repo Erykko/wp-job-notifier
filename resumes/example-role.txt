@@ -1,0 +1,26 @@
+YOUR NAME
+
+CONTACT INFORMATION
+Your City, Country
+you@example.com
++1 555 000 0000
+https://example.com
+
+PROFESSIONAL SUMMARY
+Example tailored resume for a specific WordPress role. Copy this file, customize it for a posting, then map the filename in by-job-id.json.
+
+WORK EXPERIENCE
+
+WordPress Developer
+Example Agency
+Remote
+January 2020 - Present
+- Highlight role-specific achievements here
+
+SKILLS
+WordPress, PHP, JavaScript, HTML, CSS, MySQL, Git, WP-CLI
+
+EDUCATION
+
+Bachelor of Arts, Example Degree
+Example University

@@ -1,0 +1,101 @@
+name: Check WordPress Jobs
+
+on:
+  schedule:
+    # Every 2 hours (UTC). Adjust as needed.
+    - cron: "0 */2 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Skip sending emails (test mode)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: check-wordpress-jobs
+  cancel-in-progress: false
+
+jobs:
+  check-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore private resume
+        env:
+          RESUME_TXT: ${{ secrets.RESUME_TXT }}
+        run: |
+          if [ -n "$RESUME_TXT" ]; then
+            printf '%s\n' "$RESUME_TXT" > resume.txt
+            echo "Restored resume.txt from secret"
+          elif [ -f resume.example.txt ]; then
+            cp resume.example.txt resume.txt
+            echo "Using resume.example.txt (set RESUME_TXT secret for a real resume)"
+          fi
+
+      - name: Run job checker
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          CANDIDATE_NAME: ${{ secrets.CANDIDATE_NAME }}
+          CANDIDATE_EMAIL: ${{ secrets.CANDIDATE_EMAIL }}
+          CANDIDATE_PHONE: ${{ secrets.CANDIDATE_PHONE }}
+          CANDIDATE_WEBSITE: ${{ secrets.CANDIDATE_WEBSITE }}
+          DRY_RUN: ${{ inputs.dry_run && 'true' || '' }}
+        run: python check_jobs.py
+
+      - name: Commit updated state files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add seen_jobs.json docs/status.json
+          if git diff --staged --quiet; then
+            echo "No state changes to commit"
+          else
+            git commit -m "Update job notifier state"
+            git pull --rebase --autostash origin main
+            git push origin main
+          fi
+
+      - name: Setup Pages
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        id: deployment
+        uses: actions/deploy-pages@v4

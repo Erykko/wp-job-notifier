@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WP Job Notifier</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --ok: #4ade80;
+      --warn: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #020617, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 3rem 1.25rem 4rem;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.25rem; }
+    .subtitle { color: var(--muted); margin-bottom: 2rem; }
+    .card {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .label { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .value { font-size: 1.1rem; margin-top: 0.25rem; }
+    .status-ok { color: var(--ok); }
+    .status-warn { color: var(--warn); }
+    ul { padding-left: 1.2rem; }
+    a { color: var(--accent); }
+    code {
+      background: rgba(15, 23, 42, 0.8);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    .jobs { list-style: none; padding: 0; }
+    .jobs li {
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+      padding: 0.75rem 0;
+    }
+    .jobs li:first-child { border-top: 0; padding-top: 0; }
+    .job-title { font-weight: 600; }
+    .job-meta { color: var(--muted); font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>WP Job Notifier</h1>
+    <p class="subtitle">Monitors <a href="https://jobs.wordpress.net/">jobs.wordpress.net</a> and emails tailored application drafts.</p>
+
+    <div class="card">
+      <div class="label">Last run (UTC)</div>
+      <div class="value" id="last-run">Loading…</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Jobs checked</div>
+      <div class="value" id="jobs-checked">—</div>
+    </div>
+
+    <div class="card">
+      <div class="label">New jobs found</div>
+      <ul class="jobs" id="new-jobs"><li class="job-meta">Loading…</li></ul>
+    </div>
+
+    <div class="card">
+      <div class="label">How it runs</div>
+      <p>This site is a status dashboard. The checker itself runs on a schedule via <a href="https://github.com/Erykko/wp-job-notifier/actions">GitHub Actions</a> every 2 hours.</p>
+      <p>Gmail is supported out of the box. Use these secrets:</p>
+      <ul>
+        <li><code>GEMINI_API_KEY</code></li>
+        <li><code>SMTP_HOST</code> = <code>smtp.gmail.com</code></li>
+        <li><code>SMTP_PORT</code> = <code>587</code></li>
+        <li><code>SMTP_USER</code> = your Gmail address</li>
+        <li><code>SMTP_PASS</code> = Gmail App Password</li>
+        <li><code>EMAIL_FROM</code> and <code>EMAIL_TO</code></li>
+      </ul>
+    </div>
+  </main>
+
+  <script>
+    async function loadStatus() {
+      const lastRun = document.getElementById("last-run");
+      const jobsChecked = document.getElementById("jobs-checked");
+      const newJobs = document.getElementById("new-jobs");
+
+      try {
+        const response = await fetch("./status.json?" + Date.now());
+        if (!response.ok) throw new Error("status.json not found yet");
+        const data = await response.json();
+
+        lastRun.textContent = data.last_run
+          ? new Date(data.last_run).toUTCString()
+          : "Never";
+        lastRun.className = "value " + (data.error ? "status-warn" : "status-ok");
+
+        jobsChecked.textContent = String(data.jobs_checked ?? 0);
+
+        newJobs.innerHTML = "";
+        if (data.error) {
+          newJobs.innerHTML = `<li class="job-meta status-warn">Error: ${data.error}</li>`;
+        } else if (!data.new_jobs || data.new_jobs.length === 0) {
+          newJobs.innerHTML = '<li class="job-meta">No new jobs on the last run.</li>';
+        } else {
+          for (const job of data.new_jobs) {
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <div class="job-title"><a href="${job.link}" target="_blank" rel="noopener">${job.title}</a></div>
+              <div class="job-meta">${job.company || "Unknown company"} · ${job.date || "date unknown"}</div>
+            `;
+            newJobs.appendChild(li);
+          }
+        }
+      } catch (error) {
+        lastRun.textContent = "Waiting for first workflow run";
+        lastRun.className = "value status-warn";
+        jobsChecked.textContent = "0";
+        newJobs.innerHTML = '<li class="job-meta">Run the GitHub Action manually to populate status.</li>';
+      }
+    }
+
+    loadStatus();
+  </script>
+</body>
+</html>
