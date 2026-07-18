@@ -1,19 +1,6 @@
 {
-  "last_run": "2026-07-18T09:39:49.090192+00:00",
+  "last_run": "2026-07-18T11:09:32.727315+00:00",
   "jobs_checked": 10,
-  "new_jobs": [
-    {
-      "title": "Vibrant WordPress Cleaning Website",
-      "company": "HuBei",
-      "link": "https://jobs.wordpress.net/job/vibrant-wordpress-cleaning-website/",
-      "date": "Sat, 18 Jul 2026 06:20:26 +0000"
-    },
-    {
-      "title": "WordPress Developer",
-      "company": "Koda North",
-      "link": "https://jobs.wordpress.net/job/wordpress-developer-887/",
-      "date": "Sat, 18 Jul 2026 06:16:49 +0000"
-    }
-  ],
+  "new_jobs": [],
   "error": null
 }
