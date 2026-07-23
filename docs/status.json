@@ -1,6 +1,31 @@
 {
-  "last_run": "2026-07-23T21:12:21.881472+00:00",
+  "last_run": "2026-07-23T23:03:10.204163+00:00",
   "jobs_checked": 10,
-  "new_jobs": [],
+  "new_jobs": [
+    {
+      "title": "WordPress Developer",
+      "company": "Koda North",
+      "link": "https://jobs.wordpress.net/job/wordpress-developer-888/",
+      "date": "Thu, 23 Jul 2026 22:18:31 +0000"
+    },
+    {
+      "title": "WordPress Developer (Elementor & Local SEO)",
+      "company": "Parti Events",
+      "link": "https://jobs.wordpress.net/job/wordpress-developer-elementor-local-seo/",
+      "date": "Thu, 23 Jul 2026 22:14:08 +0000"
+    },
+    {
+      "title": "Websiteentwickler",
+      "company": "Info-Beihilfe.de",
+      "link": "https://jobs.wordpress.net/job/websiteentwickler/",
+      "date": "Thu, 23 Jul 2026 22:10:27 +0000"
+    },
+    {
+      "title": "Modern 7-Page eBook WordPress Store",
+      "company": "GeniusXLab",
+      "link": "https://jobs.wordpress.net/job/modern-7-page-ebook-wordpress-store/",
+      "date": "Thu, 23 Jul 2026 22:00:27 +0000"
+    }
+  ],
   "error": null
 }
