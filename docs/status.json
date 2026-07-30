@@ -1,6 +1,13 @@
 {
-  "last_run": "2026-07-30T19:42:30.351033+00:00",
+  "last_run": "2026-07-30T21:17:27.170007+00:00",
   "jobs_checked": 10,
-  "new_jobs": [],
+  "new_jobs": [
+    {
+      "title": "Sr. WordPress Developer",
+      "company": "CMSMINDS LLP",
+      "link": "https://jobs.wordpress.net/job/sr-wordpress-developer-23/",
+      "date": "Thu, 30 Jul 2026 20:56:24 +0000"
+    }
+  ],
   "error": null
 }
