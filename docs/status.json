@@ -1,19 +1,6 @@
 {
-  "last_run": "2026-08-13T05:44:09.758283+00:00",
+  "last_run": "2026-08-13T07:43:25.733285+00:00",
   "jobs_checked": 6,
-  "new_jobs": [
-    {
-      "title": "Web Developer",
-      "company": "Fixel",
-      "link": "https://jobs.wordpress.net/job/web-developer-216/",
-      "date": "Thu, 13 Aug 2026 05:40:37 +0000"
-    },
-    {
-      "title": "WordPress Developer",
-      "company": "TwienX Media",
-      "link": "https://jobs.wordpress.net/job/wordpress-developer-889/",
-      "date": "Thu, 13 Aug 2026 05:39:22 +0000"
-    }
-  ],
+  "new_jobs": [],
   "error": null
 }
